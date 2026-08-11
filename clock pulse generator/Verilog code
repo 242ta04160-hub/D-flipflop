@@ -1,0 +1,32 @@
+module clock_pulse_generator #(
+    parameter DIVISOR = 4
+)(
+    input  wire clk,
+    input  wire reset,
+    input  wire enable,
+    output reg  pulse_out
+);
+
+    integer count;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            count     <= 0;
+            pulse_out <= 1'b0;
+        end
+        else if (!enable) begin
+            count     <= 0;
+            pulse_out <= 1'b0;
+        end
+        else begin
+            if (count == DIVISOR - 1) begin
+                count     <= 0;
+                pulse_out <= ~pulse_out;
+            end
+            else begin
+                count <= count + 1;
+            end
+        end
+    end
+
+endmodule
